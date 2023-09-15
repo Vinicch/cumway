@@ -1,16 +1,12 @@
 use std::{process::Command, thread, time};
 
 fn main() {
-    let mut universe = generate_universe(20, 20);
-    let generations = 999;
+    let mut universe = generate_universe(50, 50);
+    let generations = 500;
     for _ in 0..=generations {
-        thread::sleep(time::Duration::from_millis(500));
+        thread::sleep(time::Duration::from_millis(100));
 
-        clear_terminal();
-
-        for row in &universe {
-            println!("{:?}", row);
-        }
+        print(&universe);
 
         universe = game_of_life(universe);
     }
@@ -73,6 +69,19 @@ fn game_of_life(current_gen: Vec<Vec<u8>>) -> Vec<Vec<u8>> {
     }
 
     next_gen
+}
+
+fn print(universe: &[Vec<u8>]) {
+    clear_terminal();
+
+    universe.iter().for_each(|row| {
+        row.iter().for_each(|cell| {
+            let pretty_cell = if *cell == 1 { '■' } else { '□' };
+            print!("{pretty_cell} ");
+        });
+
+        println!();
+    });
 }
 
 fn clear_terminal() {
